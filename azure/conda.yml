@@ -12,3 +12,6 @@ dependencies:
       - pandas==2.2.3
       - scikit-learn==1.9.1
       - joblib==1.6.0
+      # The Azure ML base image refuses to start the container without this.
+      # It is the small web server that calls init() and run().
+      - azureml-inference-server-http==1.5.1

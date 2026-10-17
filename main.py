@@ -101,11 +101,17 @@ def command_predict():
 # INPUTS: None
 # OUTPUTS: None. It writes reports/endpoint.json
 # --------------------------------------------------------------
-def command_deploy():
+def command_deploy(use_existing):
     from azure_ml import deploy, get_client, register_model
+    from config import REGISTERED_MODEL_NAME
 
     client = get_client()
-    registered = register_model(client, PROJECT_ROOT / "models")
+    if use_existing:
+        # The model is already in the registry. Do not upload it again.
+        registered = client.models.get(name=REGISTERED_MODEL_NAME, label="latest")
+        print(f"Using existing {registered.name} version {registered.version}")
+    else:
+        registered = register_model(client, PROJECT_ROOT / "models")
     details = deploy(client, registered)
     print(json.dumps(details, indent=2))
 
@@ -169,7 +175,14 @@ def build_parser():
     )
 
     subparsers.add_parser("predict", help="Score sample_request.json with the local model")
-    subparsers.add_parser("deploy", help="Register the model and deploy an online endpoint")
+    deploy_parser = subparsers.add_parser(
+        "deploy", help="Register the model and deploy an online endpoint"
+    )
+    deploy_parser.add_argument(
+        "--existing",
+        action="store_true",
+        help="Deploy the model already in the registry. Do not upload a new copy.",
+    )
     subparsers.add_parser("invoke", help="Send the sample request to the live endpoint")
     subparsers.add_parser("teardown", help="Delete the endpoint to stop the hourly charge")
     return parser
@@ -188,7 +201,7 @@ def main():
     elif args.command == "predict":
         command_predict()
     elif args.command == "deploy":
-        command_deploy()
+        command_deploy(use_existing=args.existing)
     elif args.command == "invoke":
         command_invoke()
     elif args.command == "teardown":
