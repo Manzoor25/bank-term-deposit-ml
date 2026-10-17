@@ -11,10 +11,13 @@ type: command
 display_name: train-and-deploy-bank-term-deposit
 experiment_name: bank-term-deposit
 description: Train three models and deploy the winner. Runs where storage is reachable.
+# The curated image's Python is older than 3.11, and pandas 3 requires 3.11+.
+# conda create builds a 3.12 environment inside the job. No local upload.
 command: >-
-  python -c "import urllib.request, zipfile; urllib.request.urlretrieve('https://github.com/Manzoor25/bank-term-deposit-ml/archive/refs/heads/main.zip', 'src.zip'); zipfile.ZipFile('src.zip').extractall('.')" &&
+  conda create -y -n bank python=3.12 pip &&
+  conda run -n bank python -c "import urllib.request, zipfile; urllib.request.urlretrieve('https://github.com/Manzoor25/bank-term-deposit-ml/archive/refs/heads/main.zip', 'src.zip'); zipfile.ZipFile('src.zip').extractall('.')" &&
   cd bank-term-deposit-ml-main &&
-  python -m pip install -r requirements.txt -r requirements-azure.txt &&
-  python main.py train --azure &&
-  python main.py deploy
+  conda run -n bank python -m pip install -r requirements.txt -r requirements-azure.txt &&
+  conda run -n bank python main.py train --azure &&
+  conda run -n bank python main.py deploy
 environment: azureml://registries/azureml/environments/sklearn-1.5/labels/latest
