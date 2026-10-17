@@ -24,4 +24,5 @@ outputs:
   model:
     type: uri_folder
     mode: upload
+compute: azureml:cpu-bank
 environment: azureml://registries/azureml/environments/sklearn-1.5/labels/latest
