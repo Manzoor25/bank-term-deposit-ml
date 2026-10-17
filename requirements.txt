@@ -1,0 +1,12 @@
+# Shopping list for running the project.
+# Versions are pinned so a later install does not silently change the model.
+# Azure-only packages live in requirements-azure.txt so GitHub Actions stays smaller.
+pandas==3.0.6
+scikit-learn==1.9.1
+mlflow==2.22.1
+# MLflow 2.22 cannot talk to SQLAlchemy 2.1. We pin the 2.0 line
+# even though our own code never imports SQLAlchemy directly.
+sqlalchemy==2.0.54
+matplotlib==3.11.2
+python-dotenv==1.2.4
+joblib==1.6.0

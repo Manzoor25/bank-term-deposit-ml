@@ -1,0 +1,31 @@
+# Secrets. A real key in Git is a leaked key.
+.env
+
+# Virtual environment. Recreate it with python -m venv venv.
+venv/
+.venv/
+
+# Python bytecode. The interpreter recreates these automatically.
+__pycache__/
+*.pyc
+.pytest_cache/
+.ruff_cache/
+.ipynb_checkpoints/
+
+# Downloaded data. The program downloads it. We do not commit it.
+data/raw/
+data/processed/
+
+# Trained model binaries can be large and are rebuilt by train.py.
+# The model that production serves lives in the Azure ML registry.
+models/*.joblib
+models/*.pkl
+mlruns/
+mlartifacts/
+mlflow.db
+mlflow.db-*
+
+# Local Azure CLI leftovers, and the temporary copy of scoring code.
+.azureml/
+azure/score_bundle/
+*.log

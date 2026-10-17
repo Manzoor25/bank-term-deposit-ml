@@ -1,0 +1,15 @@
+[tool.ruff]
+target-version = "py312"
+line-length = 100
+
+[tool.ruff.lint]
+# E = style errors, F = real bugs like unused imports, I = import order.
+# E501 (line too long) is off because the teaching comments are meant
+# to be read like a textbook, not squeezed onto one line.
+select = ["E", "F", "I"]
+ignore = ["E501"]
+
+[tool.ruff.lint.per-file-ignores]
+# The notebook adds the project folder to the import path, then imports.
+# That order is the lesson. It is not a bug.
+"notebooks/*.ipynb" = ["E402"]

@@ -1,0 +1,17 @@
+# Azure ML uploads the scoring code folder. Keep that upload small.
+# The model itself is registered separately and arrives as AZUREML_MODEL_DIR.
+venv/
+.venv/
+.git/
+.github/
+mlruns/
+data/
+notebooks/
+tests/
+reports/
+blog/
+__pycache__/
+*.pyc
+.env
+*.joblib
+*.pkl

@@ -1,0 +1,6 @@
+# Packages for talking to Azure Machine Learning.
+# Install these only when you train with --azure or deploy.
+# The endpoint container does not use this file. It uses azure/conda.yml.
+azure-ai-ml==1.35.2
+azure-identity==1.26.0
+azureml-mlflow==1.60.0
