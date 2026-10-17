@@ -306,6 +306,18 @@ def train_and_select(
     model_path = output_dir / "pipeline.joblib"
     joblib.dump(winner, model_path)
 
+    # Keep a copy of the MLflow model next to the joblib file.
+    # A cloud job can copy this folder to its output mount. The laptop
+    # cannot upload it itself on this subscription.
+    if not str(mlflow.get_tracking_uri()).startswith("azureml:"):
+        from mlflow.artifacts import download_artifacts
+
+        download_artifacts(
+            run_id=run_ids[winner_name],
+            artifact_path="model",
+            dst_path=str(output_dir / "mlflow-model"),
+        )
+
     model_card = {
         "winner": winner_name,
         "selection_metric": "cv_average_precision",
