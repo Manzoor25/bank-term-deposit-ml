@@ -1,0 +1,9 @@
+# Deploys the registered MLflow model. No local code folder.
+# Azure ML builds the serving image from the environment captured
+# when the model was logged, which lives in workspace storage.
+$schema: https://azuremlschemas.azureedge.net/latest/managedOnlineDeployment.schema.json
+name: blue
+endpoint_name: bank-td-mm25
+model: azureml:bank-term-deposit-classifier@latest
+instance_type: Standard_F2s_v2
+instance_count: 1

@@ -19,6 +19,7 @@
 # =============================================================
 
 import json
+import os
 from pathlib import Path
 
 # joblib saves Python objects to disk. sklearn recommends it over pickle
@@ -178,16 +179,24 @@ def train_and_select(
     frame,
     tracking_uri=None,
     experiment_name=EXPERIMENT_NAME,
+    register_name=None,
     small=False,
     cv_folds=CV_FOLDS,
     output_dir=MODEL_DIR,
     reports_dir=REPORTS_DIR,
 ):
     if not tracking_uri:
-        # Local default: one SQLite file in the project folder.
-        # An azureml:// address, passed in by main.py, logs to Azure instead.
+        # Inside an Azure ML job the platform sets this variable for us.
+        # We must not replace it with a local SQLite file, or the run
+        # never shows up in the workspace.
+        tracking_uri = os.getenv("MLFLOW_TRACKING_URI")
+    if not tracking_uri:
         tracking_uri = sqlite_tracking_uri(PROJECT_ROOT / "mlflow.db")
     mlflow.set_tracking_uri(tracking_uri)
+    if str(tracking_uri).startswith("azureml:"):
+        print("Logging this experiment to Azure Machine Learning.")
+    else:
+        print("Logging this experiment to a local SQLite file.")
 
     mlflow.set_experiment(experiment_name)
 
@@ -273,6 +282,15 @@ def train_and_select(
 
     winner_name = choose_winner(cv_scores)
     winner = fitted_models[winner_name]
+
+    if register_name:
+        # This uses the tracking server, not the Azure CLI. An Azure ML
+        # job can do it. A laptop without `az` cannot.
+        mlflow.register_model(
+            model_uri=f"runs:/{run_ids[winner_name]}/model",
+            name=register_name,
+        )
+        print(f"Registered {register_name} from run {run_ids[winner_name]}")
 
     # Re-open the winning run and tag it, so the Azure ML screen shows
     # which attempt we actually shipped.

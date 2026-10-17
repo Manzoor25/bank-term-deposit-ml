@@ -1,0 +1,6 @@
+# Creates the URL. No files are uploaded from the laptop.
+# The model must already be in the registry. azure/train_job.yml does that.
+$schema: https://azuremlschemas.azureedge.net/latest/managedOnlineEndpoint.schema.json
+name: bank-td-mm25
+auth_mode: key
+description: Predict whether a client will subscribe to a term deposit.

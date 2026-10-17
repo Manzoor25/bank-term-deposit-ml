@@ -18,6 +18,5 @@ command: >-
   conda run -n bank python -c "import urllib.request, zipfile; urllib.request.urlretrieve('https://github.com/Manzoor25/bank-term-deposit-ml/archive/refs/heads/main.zip', 'src.zip'); zipfile.ZipFile('src.zip').extractall('.')" &&
   cd bank-term-deposit-ml-main &&
   conda run -n bank python -m pip install -r requirements.txt -r requirements-azure.txt &&
-  conda run -n bank python main.py train --azure &&
-  conda run -n bank python main.py deploy
+  conda run -n bank python main.py train --register
 environment: azureml://registries/azureml/environments/sklearn-1.5/labels/latest

@@ -50,21 +50,26 @@ def command_download():
 # INPUTS: use_azure (True logs the runs into Azure ML, not just a local folder)
 # OUTPUTS: The summary dictionary from train.py
 # --------------------------------------------------------------
-def command_train(use_azure):
+def command_train(use_azure, register):
+    from config import REGISTERED_MODEL_NAME
     from ingest import ingest
     from train import train_and_select
 
     tracking_uri = None
     if use_azure:
         # Imported only in this branch so a local train does not need
-        # the Azure packages.
+        # the Azure packages. An Azure ML job should use --register
+        # instead: the platform already set the tracking address.
         from azure_ml import get_client
         from azure_ml import tracking_uri as azure_tracking_uri
 
         tracking_uri = azure_tracking_uri(get_client())
-        print("Logging this experiment to Azure Machine Learning.")
 
-    summary = train_and_select(ingest(), tracking_uri=tracking_uri)
+    summary = train_and_select(
+        ingest(),
+        tracking_uri=tracking_uri,
+        register_name=REGISTERED_MODEL_NAME if register or use_azure else None,
+    )
     print(f"Winner: {summary['winner']}")
     print(summary["results_markdown"])
     print(f"Saved model: {summary['model_path']}")
@@ -155,7 +160,12 @@ def build_parser():
     train_parser.add_argument(
         "--azure",
         action="store_true",
-        help="Log the MLflow runs to the Azure ML workspace",
+        help="Log the MLflow runs to the Azure ML workspace from a laptop",
+    )
+    train_parser.add_argument(
+        "--register",
+        action="store_true",
+        help="Register the winner in whatever MLflow server is already configured",
     )
 
     subparsers.add_parser("predict", help="Score sample_request.json with the local model")
@@ -174,7 +184,7 @@ def main():
     if args.command == "download":
         command_download()
     elif args.command == "train":
-        command_train(use_azure=args.azure)
+        command_train(use_azure=args.azure, register=args.register)
     elif args.command == "predict":
         command_predict()
     elif args.command == "deploy":
