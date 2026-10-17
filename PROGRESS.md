@@ -4,18 +4,19 @@
 
 - Chose the dataset and the modeling rules. Reasons are in [DECISIONS.md](DECISIONS.md).
 - Created Azure resource group `rg-bank-deposit-ml` and workspace `mlw-bank-deposit` in East US.
-- Scaffolded the project: settings, ingestion, features, training, scoring, tests, and the GitHub Actions workflow.
+- Ingestion, feature engineering, three-model training, scoring, and pytest are in place.
+- `ruff check` passed and `pytest` passed: 15 tests, no Azure login required.
+- Trained on the real 45,211-row file. Gradient boosting won on cross-validated average precision (0.428). The table is in [reports/results.md](reports/results.md).
 
 ## Next
 
-- Run the unit tests and fix whatever they catch.
-- Train on the real CSV and write the results table.
-- Log that run to Azure ML, register the winner, and deploy the managed online endpoint.
-- Fill the README, the learning guide, and the blog post with the real numbers.
+- Log the same experiment to Azure ML (`python main.py train --azure`).
+- Register the winner and deploy the managed online endpoint.
+- Fill the README, the learning guide, and the blog post.
 - Publish the GitHub repo and the blog page.
 
 ## Decisions and blockers
 
-- Decisions so far are in [DECISIONS.md](DECISIONS.md).
-- No blocker yet. The workspace exists. The endpoint is not deployed, so it is not billing compute yet.
-- The workspace itself created a storage account, a key vault, and Application Insights. Those are the cheap part. The expensive part is the endpoint virtual machine, which does not exist yet.
+- Decisions are in [DECISIONS.md](DECISIONS.md).
+- No blocker yet. The endpoint is not deployed, so the virtual machine is not billing yet.
+- The workspace already created a storage account, a key vault, and Application Insights. Those are the cheap part.

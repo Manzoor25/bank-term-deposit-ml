@@ -1,0 +1,14 @@
+# The endpoint is a fresh computer. This file is its shopping list.
+# Keep scikit-learn on the same version as requirements.txt so the
+# saved pipeline opens cleanly. train.py writes that version into
+# this file's comments when we pin, and deploy uses these pins.
+name: bank-term-deposit
+channels:
+  - conda-forge
+dependencies:
+  - python=3.12
+  - pip
+  - pip:
+      - pandas==3.0.6
+      - scikit-learn==1.9.1
+      - joblib==1.6.0
