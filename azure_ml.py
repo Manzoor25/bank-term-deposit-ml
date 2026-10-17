@@ -122,10 +122,18 @@ def subscription_id():
 # --------------------------------------------------------------
 def get_client():
     from azure.ai.ml import MLClient
-    from azure.identity import DefaultAzureCredential
+    from azure.identity import DefaultAzureCredential, ManagedIdentityCredential
+
+    # Inside an Azure ML job, AZUREML_RUN_ID is set and the compute has
+    # its own identity. DefaultAzureCredential often fails there.
+    # On a laptop, that variable is absent and we use the az login.
+    if os.getenv("AZUREML_RUN_ID"):
+        credential = ManagedIdentityCredential()
+    else:
+        credential = DefaultAzureCredential(exclude_interactive_browser_credential=True)
 
     return MLClient(
-        credential=DefaultAzureCredential(exclude_interactive_browser_credential=True),
+        credential=credential,
         subscription_id=subscription_id(),
         resource_group_name=AZURE_RESOURCE_GROUP,
         workspace_name=AZURE_ML_WORKSPACE,
