@@ -19,6 +19,9 @@ command: >-
   cd bank-term-deposit-ml-main &&
   conda run -n bank python -m pip install -r requirements.txt -r requirements-azure.txt &&
   conda run -n bank env MLFLOW_TRACKING_URI=sqlite:///mlflow.db python main.py train &&
-  mkdir -p ${{outputs.default}}/model &&
-  cp -r models/. ${{outputs.default}}/model/
+  cp -r models/. ${{outputs.model}}/
+outputs:
+  model:
+    type: uri_folder
+    mode: upload
 environment: azureml://registries/azureml/environments/sklearn-1.5/labels/latest
