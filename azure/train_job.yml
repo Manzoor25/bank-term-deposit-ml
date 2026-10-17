@@ -1,0 +1,20 @@
+# This job runs inside Azure ML, not on the laptop.
+# WHY: this subscription turns off public access on every storage account
+# and will not let us turn it back on. The laptop cannot upload a model
+# file. Compute inside the managed virtual network can, through a private
+# endpoint. See DECISIONS.md.
+#
+# The command downloads the public GitHub repo. It does not upload a local
+# folder, because that upload is the step that fails from a laptop.
+$schema: https://azuremlschemas.azureedge.net/latest/commandJob.schema.json
+type: command
+display_name: train-and-deploy-bank-term-deposit
+experiment_name: bank-term-deposit
+description: Train three models and deploy the winner. Runs where storage is reachable.
+command: >-
+  python -c "import urllib.request, zipfile; urllib.request.urlretrieve('https://github.com/Manzoor25/bank-term-deposit-ml/archive/refs/heads/main.zip', 'src.zip'); zipfile.ZipFile('src.zip').extractall('.')" &&
+  cd bank-term-deposit-ml-main &&
+  python -m pip install -r requirements.txt -r requirements-azure.txt &&
+  python main.py train --azure &&
+  python main.py deploy
+environment: azureml://registries/azureml/environments/sklearn-1.5/labels/latest

@@ -18,6 +18,7 @@
 # =============================================================
 
 import json
+import os
 import shutil
 import subprocess
 from pathlib import Path
@@ -52,6 +53,32 @@ BASE_IMAGE = "mcr.microsoft.com/azureml/openmpi4.1.0-ubuntu20.04:latest"
 
 
 # --------------------------------------------------------------
+# FUNCTION: azure_cli_path
+# WHAT IT DOES: Finds the az command on this computer
+# WHY WE NEED IT: On Windows the command is a .cmd file. Python
+#                 sometimes cannot run the short name "az".
+# INPUTS: None
+# OUTPUTS: A full path to az or az.cmd
+# --------------------------------------------------------------
+def azure_cli_path():
+    # On Windows, `az` is usually az.cmd, not az.exe. Python's subprocess
+    # does not always resolve that short name. shutil.which does.
+    found = shutil.which("az") or shutil.which("az.cmd")
+    if found:
+        return found
+
+    windows_default = Path(os.environ.get("ProgramFiles", r"C:\Program Files"))
+    windows_default = windows_default / "Microsoft SDKs" / "Azure" / "CLI2" / "wbin" / "az.cmd"
+    if windows_default.exists():
+        return str(windows_default)
+
+    raise FileNotFoundError(
+        "The Azure CLI was not found. Install it and run `az login`, "
+        "or set AZURE_SUBSCRIPTION_ID in a .env file."
+    )
+
+
+# --------------------------------------------------------------
 # FUNCTION: subscription_id
 # WHAT IT DOES: Finds which Azure subscription to use
 # WHY WE NEED IT: The id is an account detail, not something we
@@ -67,7 +94,7 @@ def subscription_id():
     # We ask it which subscription is active, and we do not print the id
     # into the repository.
     completed = subprocess.run(
-        ["az", "account", "show", "--query", "id", "-o", "tsv"],
+        [azure_cli_path(), "account", "show", "--query", "id", "-o", "tsv"],
         check=True,
         capture_output=True,
         text=True,

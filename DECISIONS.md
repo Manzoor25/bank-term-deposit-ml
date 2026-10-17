@@ -119,6 +119,17 @@ The endpoint does **not** scale to zero. Leaving it up bills every hour. `python
 
 Tests should pass on a plane. A workflow that deploys on every push would create a bill and would need a secret. The real training run is a separate command you run on purpose.
 
+## 15. How does Azure storage authentication work?
+
+**Chose:** Workspace datastore auth mode `identity`, plus a managed virtual network with a private endpoint to storage.
+**Rejected:** Turning shared keys or public network access back on. This subscription will not allow it. A brand-new storage account came back with public access disabled and shared keys disabled, and a patch to enable public access was ignored.
+
+Two errors showed up in order:
+1. `KeyBasedAuthenticationNotPermitted` — the workspace was trying to use an account key.
+2. `AuthorizationFailure` — after switching to identity, the laptop still could not reach the blob endpoint, because public network access is off and there is no private path from this machine.
+
+The managed network gives Azure ML compute a private door. [azure/train_job.yml](azure/train_job.yml) runs training and deployment from that compute. It downloads the code from GitHub instead of uploading a local folder, because the upload is the step the laptop cannot do.
+
 ## 14. Is the model binary committed?
 
 **Chose:** No. Git ignores `models/*.joblib`. The registry copy is the one the endpoint serves. `reports/results.md` is committed so the numbers are still visible.

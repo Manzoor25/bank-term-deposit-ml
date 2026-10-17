@@ -1,0 +1,18 @@
+{
+  "winner": "gradient_boosting",
+  "selection_metric": "cv_average_precision",
+  "selection_score": 0.42750445089424116,
+  "threshold": 0.5,
+  "mlflow_run_id": "187898e133da4be995ea5dfba3f2a010",
+  "experiment_name": "bank-term-deposit",
+  "train_rows": 36168,
+  "test_rows": 9043,
+  "positive_rate_train": 0.11698186241981863,
+  "excluded_because_leakage": [
+    "duration"
+  ],
+  "excluded_as_brittle": [
+    "day"
+  ],
+  "note": "Threshold 0.5 is a teaching default, not a business decision. The endpoint returns a probability so a caller can choose their own cutoff."
+}

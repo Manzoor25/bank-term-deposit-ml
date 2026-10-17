@@ -10,13 +10,13 @@
 
 ## Next
 
-- Log the same experiment to Azure ML (`python main.py train --azure`).
-- Register the winner and deploy the managed online endpoint.
-- Fill the README, the learning guide, and the blog post.
-- Publish the GitHub repo and the blog page.
+- Wait for the managed virtual network private endpoints to become active.
+- Push this repo, then run [azure/train_job.yml](azure/train_job.yml) so training, registration, and deployment happen on compute that can reach storage.
+- Invoke the endpoint and write its URL into the README.
+- Publish the blog with GitHub Pages.
 
 ## Decisions and blockers
 
 - Decisions are in [DECISIONS.md](DECISIONS.md).
-- No blocker yet. The endpoint is not deployed, so the virtual machine is not billing yet.
-- The workspace already created a storage account, a key vault, and Application Insights. Those are the cheap part.
+- Blocker, with a path around it: this subscription forces storage public access off. A laptop cannot upload the model. Decision 15 records that, and the cloud job is the workaround.
+- The endpoint is not deployed yet, so the virtual machine is not billing yet. The workspace storage, key vault, and Application Insights already exist.
