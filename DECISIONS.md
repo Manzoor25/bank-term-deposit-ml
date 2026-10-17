@@ -81,7 +81,7 @@ The 0.5 probability cutoff is a teaching default, not a business rule. The endpo
 **Chose:** A local SQLite file (`mlflow.db`) by default. `--azure` switches the same training function to the workspace MLflow address.
 **Rejected:** The old `./mlruns` folder, and training on an Azure compute cluster.
 
-We pin MLflow 2.22, not MLflow 3. MLflow 3's saver refuses to store a random forest unless you whitelist internal scikit-learn types, one error at a time. Version 2 is also what the Azure ML tracking examples still match. Local logs go to one SQLite file (`mlflow.db`) instead of a folder of text files, so there is a single notebook to delete. The Azure address is only used when you pass `--azure`, so tests and GitHub Actions never need a cloud login.
+We pin MLflow 2.22, not MLflow 3. MLflow 3's saver refuses to store a random forest unless you whitelist internal scikit-learn types, one error at a time. Version 2 is also what the Azure ML tracking examples still match. MLflow 2.22 requires pandas older than 3, so pandas is pinned to 2.2.3 even though 3.0 exists. Local logs go to one SQLite file (`mlflow.db`) instead of a folder of text files, so there is a single notebook to delete. The Azure address is only used when you pass `--azure`, so tests and GitHub Actions never need a cloud login.
 
 Training itself stays on the laptop. The table is small. A compute cluster would cost money and add nothing to the lesson. The cloud's job is the experiment log, the model registry, and the live endpoint.
 
