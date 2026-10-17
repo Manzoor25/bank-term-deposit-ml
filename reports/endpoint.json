@@ -1,0 +1,21 @@
+{
+  "endpoint_name": "bank-td-mm25",
+  "deployment_name": "blue",
+  "instance_type": "Standard_F2s_v2",
+  "instance_count": 1,
+  "scoring_uri": "https://bank-td-mm25.eastus.inference.ml.azure.com/score",
+  "location": "eastus",
+  "resource_group": "rg-bank-deposit-ml",
+  "workspace": "mlw-bank-deposit",
+  "model": "bank-term-deposit-classifier:2",
+  "sample_response": {
+    "model_name": "gradient_boosting",
+    "predictions": [
+      {
+        "will_subscribe": false,
+        "probability": 0.4229,
+        "threshold": 0.5
+      }
+    ]
+  }
+}

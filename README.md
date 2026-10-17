@@ -57,6 +57,32 @@ flowchart LR
   Endpoint --> Client[JSON score request]
 ```
 
+## Live endpoint
+
+The managed online endpoint is up. One `Standard_F2s_v2` instance. Scoring URL:
+
+`https://bank-td-mm25.eastus.inference.ml.azure.com/score`
+
+Do not call that URL with a browser. It expects a POST, and the key stays in Azure. From this folder, after `az login`:
+
+```powershell
+az ml online-endpoint invoke --name bank-td-mm25 --resource-group rg-bank-deposit-ml --workspace-name mlw-bank-deposit --request-file sample_request.json
+```
+
+That sample returned:
+
+```json
+{"model_name": "gradient_boosting", "predictions": [{"will_subscribe": false, "probability": 0.4229, "threshold": 0.5}]}
+```
+
+The same customer scored 0.4229 on the laptop. The request included `duration: 999`. Both answers ignored it.
+
+**This bills about $0.085 an hour until you delete it.** The training cluster `cpu-bank` is set to scale to zero. The endpoint does not.
+
+```powershell
+python main.py teardown
+```
+
 ## Results
 
 Trained on 36,168 rows, graded once on 9,043 held-out rows. About 11.7% of people subscribed. A model that always says "no" would be about 88.3% accurate and would find nobody. Accuracy is the wrong trophy.

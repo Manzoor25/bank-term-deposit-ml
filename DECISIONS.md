@@ -130,6 +130,13 @@ Two errors showed up in order:
 
 The managed network gives Azure ML compute a private door. [azure/train_job.yml](azure/train_job.yml) runs training and deployment from that compute. It downloads the code from GitHub instead of uploading a local folder, because the upload is the step the laptop cannot do.
 
+## 16. Why is the settings file not named config.py?
+
+**Chose:** [settings.py](settings.py).
+**Rejected:** Keeping the name `config.py`.
+
+The Azure ML scoring server already has a module named `config`. Our file shadowed it. The container downloaded the model, started, and died on import with `attempted relative import with no known parent package`. Renaming the file fixed the crash. The inference server package `azureml-inference-server-http` also had to be in the container, or it never got as far as the import.
+
 ## 14. Is the model binary committed?
 
 **Chose:** No. Git ignores `models/*.joblib`. The registry copy is the one the endpoint serves. `reports/results.md` is committed so the numbers are still visible.

@@ -3,20 +3,20 @@
 ## Done
 
 - Chose the dataset and the modeling rules. Reasons are in [DECISIONS.md](DECISIONS.md).
-- Created Azure resource group `rg-bank-deposit-ml` and workspace `mlw-bank-deposit` in East US.
 - Ingestion, feature engineering, three-model training, scoring, and pytest are in place.
-- `ruff check` passed and `pytest` passed: 15 tests, no Azure login required.
+- `ruff check` passed and `pytest` passed: 15 tests.
 - Trained on the real 45,211-row file. Gradient boosting won on cross-validated average precision (0.428). The table is in [reports/results.md](reports/results.md).
+- Registered `bank-term-deposit-classifier` version 2 in workspace `mlw-bank-deposit`.
+- Deployed managed online endpoint `bank-td-mm25` on `Standard_F2s_v2`. A live invoke returned probability 0.4229, the same number as the laptop.
+- Published the repo and the blog page.
 
 ## Next
 
-- Wait for the managed virtual network private endpoints to become active.
-- Push this repo, then run [azure/train_job.yml](azure/train_job.yml) so training, registration, and deployment happen on compute that can reach storage.
-- Invoke the endpoint and write its URL into the README.
-- Publish the blog with GitHub Pages.
+- Read [LEARNING_GUIDE.md](LEARNING_GUIDE.md) before treating this as interview material.
+- Delete the endpoint when you are done looking. It bills about $0.085 an hour and does not scale to zero: `python main.py teardown`.
 
 ## Decisions and blockers
 
 - Decisions are in [DECISIONS.md](DECISIONS.md).
-- Blocker, with a path around it: this subscription forces storage public access off. A laptop cannot upload the model. Decision 15 records that, and the cloud job is the workaround.
-- The endpoint is not deployed yet, so the virtual machine is not billing yet. The workspace storage, key vault, and Application Insights already exist.
+- This subscription disables public storage access. The laptop could not upload the model. A compute cluster with its own identity, inside the managed virtual network, did the upload and the deploy. That is decision 15.
+- The endpoint is the thing that is billing now. The training cluster is set to scale to zero.
