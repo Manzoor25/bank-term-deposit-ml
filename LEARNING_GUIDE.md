@@ -30,7 +30,7 @@ For each decision, ask "why not the other way?" Answer before you read the parag
 | Decision | The question to ask out loud | Where the code proves it |
 | --- | --- | --- |
 | 1. Dataset | Why not a Kaggle churn file? | [ingest.py](ingest.py) downloads a public URL. No token. |
-| 2. The question | What would go wrong if we kept `duration`? | [config.py](config.py) `LEAKAGE_COLUMNS` |
+| 2. The question | What would go wrong if we kept `duration`? | [settings.py](settings.py) `LEAKAGE_COLUMNS` |
 | 3. Dropping `day` | Is `day` leakage, or just a bad feature? | It is in `UNUSED_COLUMNS`, not `LEAKAGE_COLUMNS`. Be ready to say the difference. |
 | 4. `pdays = -1` | Why is -1 not a small number of days? | [features.py](features.py) builds `never_contacted_before` |
 | 5. `campaign` minus 1 | What does the published column include that we should not? | Same function, `contacts_already_made` |

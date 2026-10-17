@@ -8,7 +8,7 @@
 # - Imports config.py only
 # =============================================================
 
-from config import LEAKAGE_COLUMNS, TARGET_COLUMN, UNUSED_COLUMNS
+from settings import LEAKAGE_COLUMNS, TARGET_COLUMN, UNUSED_COLUMNS
 
 
 def test_duration_is_treated_as_leakage():

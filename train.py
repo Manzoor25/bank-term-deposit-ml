@@ -34,7 +34,9 @@ from sklearn.ensemble import HistGradientBoostingClassifier, RandomForestClassif
 from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import StratifiedKFold, cross_val_score, train_test_split
 
-from config import (
+from evaluate import choose_winner, compute_metrics, results_markdown
+from features import add_engineered_columns, build_pipeline
+from settings import (
     CV_FOLDS,
     DECISION_THRESHOLD,
     EXPERIMENT_NAME,
@@ -45,8 +47,6 @@ from config import (
     TARGET_COLUMN,
     TEST_SIZE,
 )
-from evaluate import choose_winner, compute_metrics, results_markdown
-from features import add_engineered_columns, build_pipeline
 
 
 # --------------------------------------------------------------

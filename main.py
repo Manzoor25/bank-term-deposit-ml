@@ -21,7 +21,7 @@
 import argparse
 import json
 
-from config import PROJECT_ROOT
+from settings import PROJECT_ROOT
 
 
 # --------------------------------------------------------------
@@ -51,8 +51,8 @@ def command_download():
 # OUTPUTS: The summary dictionary from train.py
 # --------------------------------------------------------------
 def command_train(use_azure, register):
-    from config import REGISTERED_MODEL_NAME
     from ingest import ingest
+    from settings import REGISTERED_MODEL_NAME
     from train import train_and_select
 
     tracking_uri = None
@@ -103,7 +103,7 @@ def command_predict():
 # --------------------------------------------------------------
 def command_deploy(use_existing):
     from azure_ml import deploy, get_client, register_model
-    from config import REGISTERED_MODEL_NAME
+    from settings import REGISTERED_MODEL_NAME
 
     client = get_client()
     if use_existing:

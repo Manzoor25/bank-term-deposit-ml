@@ -25,7 +25,7 @@ from pathlib import Path
 import pandas as pd
 
 # config.py holds the shared settings. See that file's header for why.
-from config import DATA_ZIP_URL, EXPECTED_COLUMNS, RAW_CSV_NAME, RAW_DIR
+from settings import DATA_ZIP_URL, EXPECTED_COLUMNS, RAW_CSV_NAME, RAW_DIR
 
 
 # --------------------------------------------------------------

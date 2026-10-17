@@ -23,7 +23,7 @@ import shutil
 import subprocess
 from pathlib import Path
 
-from config import (
+from settings import (
     AZURE_ML_LOCATION,
     AZURE_ML_WORKSPACE,
     AZURE_RESOURCE_GROUP,
@@ -176,7 +176,7 @@ def stage_scoring_code(destination):
         shutil.rmtree(destination)
     destination.mkdir(parents=True)
 
-    for file_name in ["config.py", "features.py", "predict.py"]:
+    for file_name in ["settings.py", "features.py", "predict.py"]:
         shutil.copy(PROJECT_ROOT / file_name, destination / file_name)
 
     # Azure expects the scoring script inside the uploaded folder.

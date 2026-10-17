@@ -137,7 +137,7 @@ The notebook is [notebooks/01_explore_the_data.ipynb](notebooks/01_explore_the_d
 | File | Job |
 | --- | --- |
 | [main.py](main.py) | The front door. You run this. |
-| [config.py](config.py) | Shared names and the columns we refuse. |
+| [settings.py](settings.py) | Shared names and the columns we refuse. Named settings, not config, because Azure's scoring server already has a module called config. |
 | [ingest.py](ingest.py) | Download the public zip and load the CSV. |
 | [features.py](features.py) | Drop leakage, fix the `-1` code, build the sklearn assembly line. |
 | [train.py](train.py) | Fit three models, log them, save the winner. |

@@ -29,7 +29,7 @@ from sklearn.impute import SimpleImputer
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import OneHotEncoder, StandardScaler
 
-from config import LEAKAGE_COLUMNS, TARGET_COLUMN, UNUSED_COLUMNS
+from settings import LEAKAGE_COLUMNS, TARGET_COLUMN, UNUSED_COLUMNS
 
 # Numbers the model can do arithmetic on, AFTER engineering.
 # contacts_already_made and never_contacted_before are created below.

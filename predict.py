@@ -17,8 +17,8 @@ from pathlib import Path
 import joblib
 import pandas as pd
 
-from config import DECISION_THRESHOLD, MODEL_DIR, REQUIRED_RAW_COLUMNS
 from features import add_engineered_columns
+from settings import DECISION_THRESHOLD, MODEL_DIR, REQUIRED_RAW_COLUMNS
 
 
 # --------------------------------------------------------------

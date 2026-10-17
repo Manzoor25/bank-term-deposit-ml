@@ -1,6 +1,9 @@
 # =============================================================
 # WHAT THIS FILE DOES:
-# This file is the project's settings notebook. It names the
+# This file is the project's settings notebook. It used to be named
+# config.py. That name collides with a module inside the Azure ML
+# scoring server, so the endpoint crashed on import. settings.py
+# does not collide. It names the
 # dataset, the folders, the column we are trying to predict,
 # and the columns we refuse to use.
 #
