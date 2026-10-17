@@ -90,9 +90,15 @@ def subscription_id():
     if AZURE_SUBSCRIPTION_ID:
         return AZURE_SUBSCRIPTION_ID
 
-    # az is the Azure command-line tool. You already logged in with it.
-    # We ask it which subscription is active, and we do not print the id
-    # into the repository.
+    # An Azure ML job does not have the Azure CLI installed. The platform
+    # puts the subscription id in an environment variable instead.
+    from_job = os.getenv("AZUREML_ARM_SUBSCRIPTION")
+    if from_job:
+        return from_job
+
+    # az is the Azure command-line tool. You already logged in with it
+    # on a laptop. We ask it which subscription is active, and we do not
+    # print the id into the repository.
     completed = subprocess.run(
         [azure_cli_path(), "account", "show", "--query", "id", "-o", "tsv"],
         check=True,

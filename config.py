@@ -123,9 +123,17 @@ INSTANCE_TYPE = "Standard_F2s_v2"
 INSTANCE_COUNT = 1
 
 # These are names, not passwords. Override them in .env if you deploy
-# into a different resource group. The subscription id is read from
-# `az account show` when this variable is empty, so it is not stored here.
-AZURE_SUBSCRIPTION_ID = os.getenv("AZURE_SUBSCRIPTION_ID", "")
-AZURE_RESOURCE_GROUP = os.getenv("AZURE_RESOURCE_GROUP", "rg-bank-deposit-ml")
-AZURE_ML_WORKSPACE = os.getenv("AZURE_ML_WORKSPACE", "mlw-bank-deposit")
+# into a different resource group.
+# AZUREML_ARM_* is set automatically inside an Azure ML job. The laptop
+# does not have those variables, so it falls back to the names below
+# and asks `az account show` for the subscription id.
+AZURE_SUBSCRIPTION_ID = os.getenv("AZURE_SUBSCRIPTION_ID") or os.getenv(
+    "AZUREML_ARM_SUBSCRIPTION", ""
+)
+AZURE_RESOURCE_GROUP = os.getenv("AZURE_RESOURCE_GROUP") or os.getenv(
+    "AZUREML_ARM_RESOURCEGROUP", "rg-bank-deposit-ml"
+)
+AZURE_ML_WORKSPACE = os.getenv("AZURE_ML_WORKSPACE") or os.getenv(
+    "AZUREML_ARM_WORKSPACE_NAME", "mlw-bank-deposit"
+)
 AZURE_ML_LOCATION = os.getenv("AZURE_ML_LOCATION", "eastus")
